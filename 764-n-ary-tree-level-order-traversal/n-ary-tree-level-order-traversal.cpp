@@ -20,24 +20,20 @@ public:
 
 class Solution {
 public:
-    vector<vector<int>> levelOrder(Node* root) {
-     vector<vector<int>>res;
-     if(!root) return res;
-     queue<Node*>q;
-     q.push(root);
-     while(!q.empty()){
-        int n=q.size();
-        vector<int> lev;
-        for(int i=0;i<n;i++){
-            Node* node=q.front();
-            q.pop();
-            lev.push_back(node->val);
-            for(Node* child: node->children){
-                q.push(child);
-            }
+    vector<vector<int>> res;
+    void dfs(Node* node, int level) {
+        if (!node) return;
+        if (res.size() == level) {
+            res.push_back({});
         }
-        res.push_back(lev);   
-      }
-      return res;
+        res[level].push_back(node->val);
+        for (Node* child : node->children) {
+            dfs(child, level + 1);
+        }
+    }
+
+    vector<vector<int>> levelOrder(Node* root) {
+        dfs(root, 0);
+        return res;
     }
 };
