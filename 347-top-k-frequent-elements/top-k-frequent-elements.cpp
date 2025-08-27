@@ -3,25 +3,27 @@ public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, int> freq;
 
-        // Count frequencies
+        // Step 1: Count frequency of each number
         for (int num : nums) {
             freq[num]++;
         }
 
-        // Convert map to vector of {num, freq}
-        vector<pair<int, int>> arr(freq.begin(), freq.end());
+        // Step 2: Min-heap to keep top k frequent elements
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> minHeap;
 
-        // Sort by frequency (descending)
-        sort(arr.begin(), arr.end(), [](auto &a, auto &b) {
-            return a.second > b.second;
-        });
-
-        // Pick top k
-        vector<int> result;
-        for (int i = 0; i < k; i++) {
-            result.push_back(arr[i].first);
+        for (auto &it : freq) {
+            minHeap.push({it.second, it.first});  // {frequency, number}
+            if (minHeap.size() > k) {
+                minHeap.pop();  // remove least frequent
+            }
         }
 
+        // Step 3: Extract results
+        vector<int> result;
+        while (!minHeap.empty()) {
+            result.push_back(minHeap.top().second);
+            minHeap.pop();
+        }
         return result;
     }
 };
