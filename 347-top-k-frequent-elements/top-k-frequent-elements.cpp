@@ -2,6 +2,28 @@ class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         unordered_map<int, int> freq;
+        for (int num : nums) {
+            freq[num]++;
+        }
+
+        priority_queue<pair<int, int>, vector<pair<int,int>>, greater<>>minHeap;
+        for(auto &it: freq){
+            minHeap.push({it.second, it.first});
+            if(minHeap.size()>k){
+                minHeap.pop();
+            }
+        } 
+        vector<int>res;
+        while(!minHeap.empty()){
+            res.push_back(minHeap.top().second);
+            minHeap.pop();
+        }
+        return res;
+    }
+};
+
+/*
+   unordered_map<int, int> freq;
         for(int num:nums){
             freq[num]++;
         }
@@ -14,12 +36,8 @@ public:
     for (int i = 0; i < k; i++) {
         result.push_back(freqVec[i].first);
     }
-
     return result;
-    }
-
-};
-/*me Complexity (Brute Force)
+time Complexity (Brute Force)
 
 Counting frequencies → O(n)
 
